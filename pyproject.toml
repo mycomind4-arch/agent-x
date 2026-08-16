@@ -1,0 +1,17 @@
+[project]
+name = "agent-x"
+version = "0.1.0"
+description = "AI investigative agency framework for autonomous-agent investigations"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
