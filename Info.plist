@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key><string>en</string>
+    <key>CFBundleExecutable</key><string>WiFiStabilizer</string>
+    <key>CFBundleIdentifier</key><string>dev.mycomind4.wifistabilizer</string>
+    <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
+    <key>CFBundleName</key><string>Wi-Fi Stabilizer</string>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>0.1.0</string>
+    <key>CFBundleVersion</key><string>1</string>
+    <key>LSMinimumSystemVersion</key><string>13.0</string>
+    <key>NSHighResolutionCapable</key><true/>
+    <key>NSLocationWhenInUseUsageDescription</key><string>Show nearby Wi-Fi networks and their channels when you request a scan.</string>
+    <key>NSBluetoothAlwaysUsageDescription</key><string>Count anonymous nearby Bluetooth signals when you request a presence scan.</string>
+    <key>NSCameraUsageDescription</key><string>Detect people in the camera view on this Mac when you turn on camera sensing. Video stays on this Mac.</string>
+    <key>NSMicrophoneUsageDescription</key><string>Detect speech sounds on this Mac when you turn on microphone sensing. Audio is not recorded or uploaded.</string>
+</dict>
+</plist>
