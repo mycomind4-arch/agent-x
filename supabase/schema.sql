@@ -1,1 +1,27 @@
--- Placeholder
+create extension if not exists pgcrypto;
+create table public.organizations(id uuid primary key default gen_random_uuid(),name text not null);
+create table public.memberships(organization_id uuid references public.organizations(id) on delete cascade,user_id uuid references auth.users(id) on delete cascade,role text not null check(role in ('owner','manager','staff')),primary key(organization_id,user_id));
+create table public.properties(id uuid primary key default gen_random_uuid(),organization_id uuid not null references public.organizations(id),name text not null,address text,unique(id,organization_id));
+create table public.work_orders(id uuid primary key default gen_random_uuid(),organization_id uuid not null references public.organizations(id),property_id uuid not null,title text not null,priority text not null default 'normal' check(priority in ('low','normal','urgent')),status text not null default 'new' check(status in ('new','in_progress','needs_approval','completed')),created_by uuid not null references auth.users(id),foreign key(property_id,organization_id) references public.properties(id,organization_id));
+create index on public.memberships(user_id);
+create index on public.properties(organization_id);
+create index on public.work_orders(organization_id,status);
+alter table public.organizations enable row level security;
+alter table public.memberships enable row level security;
+alter table public.properties enable row level security;
+alter table public.work_orders enable row level security;
+create schema if not exists private;
+create function private.is_member(org uuid) returns boolean language sql stable security definer set search_path='' as $$select exists(select 1 from public.memberships where organization_id=org and user_id=(select auth.uid()))$$;
+revoke all on function private.is_member(uuid) from public,anon;
+grant usage on schema private to authenticated;
+grant execute on function private.is_member(uuid) to authenticated;
+create policy org_read on public.organizations for select to authenticated using(private.is_member(id));
+create policy membership_read on public.memberships for select to authenticated using(private.is_member(organization_id));
+create policy property_read on public.properties for select to authenticated using(private.is_member(organization_id));
+create policy property_insert on public.properties for insert to authenticated with check(private.is_member(organization_id));
+create policy property_update on public.properties for update to authenticated using(private.is_member(organization_id)) with check(private.is_member(organization_id));
+create policy work_read on public.work_orders for select to authenticated using(private.is_member(organization_id));
+create policy work_insert on public.work_orders for insert to authenticated with check(private.is_member(organization_id) and created_by=(select auth.uid()));
+create policy work_update on public.work_orders for update to authenticated using(private.is_member(organization_id)) with check(private.is_member(organization_id));
+grant select on public.organizations,public.memberships to authenticated;
+grant select,insert,update on public.properties,public.work_orders to authenticated;
